@@ -1,5 +1,3 @@
-var PENDO_API_KEY = 'YOUR_PENDO_API_KEY';
-
 (function (apiKey) {
     if (apiKey === 'YOUR_PENDO_API_KEY') {
         console.info('[middle-earth-sandbox] Pendo API key not set; skipping Pendo install.');
@@ -10,7 +8,7 @@ var PENDO_API_KEY = 'YOUR_PENDO_API_KEY';
         var v, w, x, y, z;
         o = p[d] = p[d] || {};
         o._q = o._q || [];
-        v = ['initialize', 'identify', 'updateOptions', 'pageLoad', 'track'];
+        v = ['initialize', 'identify', 'updateOptions', 'pageLoad', 'track', 'trackAgent'];
         for (w = 0, x = v.length; w < x; ++w)
             (function (m) {
                 o[m] =
@@ -37,4 +35,4 @@ var PENDO_API_KEY = 'YOUR_PENDO_API_KEY';
             name: 'The Fellowship of the Ring'
         }
     });
-})(PENDO_API_KEY);
+})('4b2edab8-c3c9-4b0b-ae25-7e14b80c1b62');
