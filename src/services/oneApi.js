@@ -42,7 +42,7 @@ async function request(path, { auth = true } = {}) {
 
 const known = (value) => (value && value !== 'NaN' ? value : 'Unknown');
 
-export function getCharacters() {
+function getAllCharacters() {
     return cached('one-api:characters', async () => {
         const docs = await request('/character?limit=1000');
         return docs.map(({ _id, name, race, realm, birth, death, wikiUrl }) => ({
@@ -57,9 +57,14 @@ export function getCharacters() {
     });
 }
 
+export async function getCharacters() {
+    const characters = await getAllCharacters();
+    return characters.filter(({ race, wikiUrl }) => race !== 'Unknown' && wikiUrl);
+}
+
 export function getQuotes() {
     return cached('one-api:quotes', async () => {
-        const [quotes, characters] = await Promise.all([request('/quote?limit=2500'), getCharacters()]);
+        const [quotes, characters] = await Promise.all([request('/quote?limit=2500'), getAllCharacters()]);
         const names = new Map(characters.map((character) => [character.id, character.name]));
         return quotes
             .map((quote) => ({
