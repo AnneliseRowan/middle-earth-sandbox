@@ -9,9 +9,14 @@ if (!API_KEY) {
 }
 
 async function request(path) {
-    const response = await fetch(`https://the-one-api.dev/v2${path}`, {
-        headers: { Authorization: `Bearer ${API_KEY}` }
-    });
+    let response = await fetch(`https://the-one-api.dev/v2${path}`, { headers: { Authorization: `Bearer ${API_KEY}` } });
+    if (response.status === 429) {
+        const resetAt = Number(response.headers.get('x-ratelimit-reset')) * 1000;
+        const waitMs = Math.min(Math.max(resetAt - Date.now(), 0) + 1000, 11 * 60 * 1000);
+        console.warn(`[fetch-lore] rate limited; retrying in ${Math.round(waitMs / 1000)}s`);
+        await new Promise((resolve) => setTimeout(resolve, waitMs));
+        response = await fetch(`https://the-one-api.dev/v2${path}`, { headers: { Authorization: `Bearer ${API_KEY}` } });
+    }
     if (!response.ok) {
         throw new Error(`The One API responded ${response.status} for ${path}`);
     }
@@ -21,7 +26,13 @@ async function request(path) {
 
 const known = (value) => (value && value !== 'NaN' ? value : 'Unknown');
 
-const [characterDocs, quoteDocs] = await Promise.all([request('/character?limit=1000'), request('/quote?limit=2500')]);
+let characterDocs, quoteDocs;
+try {
+    [characterDocs, quoteDocs] = await Promise.all([request('/character?limit=1000'), request('/quote?limit=2500')]);
+} catch (error) {
+    console.warn(`[fetch-lore] ${error.message}; deploying without lore.json (built-in quotes).`);
+    process.exit(0);
+}
 
 const names = new Map(characterDocs.map(({ _id, name }) => [_id, name]));
 
