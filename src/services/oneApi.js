@@ -1,7 +1,4 @@
 const BASE_URL = 'https://the-one-api.dev/v2';
-const API_KEY = import.meta.env.VITE_ONE_API_KEY;
-
-export const hasApiKey = Boolean(API_KEY);
 
 const inflight = new Map();
 
@@ -26,13 +23,8 @@ function cached(key, load) {
     return inflight.get(key);
 }
 
-async function request(path, { auth = true } = {}) {
-    if (auth && !API_KEY) {
-        throw new Error('VITE_ONE_API_KEY is not set');
-    }
-    const response = await fetch(`${BASE_URL}${path}`, {
-        headers: auth ? { Authorization: `Bearer ${API_KEY}` } : {}
-    });
+async function request(path) {
+    const response = await fetch(`${BASE_URL}${path}`);
     if (!response.ok) {
         throw new Error(`The One API responded ${response.status}`);
     }
@@ -40,45 +32,32 @@ async function request(path, { auth = true } = {}) {
     return docs;
 }
 
-const known = (value) => (value && value !== 'NaN' ? value : 'Unknown');
+let lorePromise;
 
-function getAllCharacters() {
-    return cached('one-api:characters', async () => {
-        const docs = await request('/character?limit=1000');
-        return docs.map(({ _id, name, race, realm, birth, death, wikiUrl }) => ({
-            id: _id,
-            name,
-            race: known(race),
-            realm: known(realm),
-            birth: known(birth),
-            death: known(death),
-            wikiUrl
-        }));
+function loadLore() {
+    lorePromise ??= fetch(`${import.meta.env.BASE_URL}lore.json`).then((response) => {
+        if (!response.ok) {
+            throw new Error('lore.json missing (build ran without ONE_API_KEY)');
+        }
+        return response.json();
     });
+    return lorePromise;
 }
 
 export async function getCharacters() {
-    const characters = await getAllCharacters();
-    return characters.filter(({ race, wikiUrl }) => race !== 'Unknown' && wikiUrl);
+    const { characters } = await loadLore();
+    return characters;
 }
 
-export function getQuotes() {
-    return cached('one-api:quotes', async () => {
-        const [quotes, characters] = await Promise.all([request('/quote?limit=2500'), getAllCharacters()]);
-        const names = new Map(characters.map((character) => [character.id, character.name]));
-        return quotes
-            .map((quote) => ({
-                text: quote.dialog.replace(/\s+/g, ' ').trim(),
-                speaker: names.get(quote.character) ?? 'Unknown'
-            }))
-            .filter(({ text }) => text.length >= 30 && text.length <= 180);
-    });
+export async function getQuotes() {
+    const { quotes } = await loadLore();
+    return quotes;
 }
 
 export function getBooks() {
-    return cached('one-api:books', () => request('/book', { auth: false }));
+    return cached('one-api:books', () => request('/book'));
 }
 
 export function getChapters(bookId) {
-    return cached(`one-api:chapters:${bookId}`, () => request(`/book/${bookId}/chapter`, { auth: false }));
+    return cached(`one-api:chapters:${bookId}`, () => request(`/book/${bookId}/chapter`));
 }

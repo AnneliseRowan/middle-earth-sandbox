@@ -20,17 +20,19 @@ A quote banner on every page rotates every 15 seconds.
 
 ## Live data: The One API
 
-Quotes and characters come from [The One API](https://the-one-api.dev). Books and chapters work without a key; quotes and characters need a free token.
+Data comes from [The One API](https://the-one-api.dev). Books and chapters are fetched live from the browser (no key needed).
+
+Quotes and characters need a free token, so they're fetched **at build time** by `scripts/fetch-lore.mjs` and baked into `public/lore.json`. The token never ships to the browser.
 
 ```bash
 # local
-echo "VITE_ONE_API_KEY=your-token" > .env
+ONE_API_KEY=your-token node scripts/fetch-lore.mjs
 
-# deployed site
-gh secret set VITE_ONE_API_KEY
+# deployed site (used by the GitHub Actions build)
+gh secret set ONE_API_KEY
 ```
 
-Without a token the site falls back to a built-in set of quotes and the Fellowship roster. Responses are cached in `sessionStorage` to stay under the 100 requests / 10 minutes rate limit.
+Without `lore.json` the site falls back to a built-in set of quotes and the Fellowship roster.
 
 ## Pendo
 

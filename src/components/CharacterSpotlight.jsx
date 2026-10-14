@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getCharacters, hasApiKey } from '../services/oneApi';
+import { getCharacters } from '../services/oneApi';
 import { MEMBERS } from '../data/fellowship';
 
 const FALLBACK = MEMBERS.map(({ id, name, race, role }) => ({
@@ -17,10 +17,9 @@ const random = (list) => list[Math.floor(Math.random() * list.length)];
 export default function CharacterSpotlight() {
     const [characters, setCharacters] = useState(FALLBACK);
     const [character, setCharacter] = useState(() => random(FALLBACK));
-    const [loading, setLoading] = useState(hasApiKey);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!hasApiKey) return;
         getCharacters()
             .then((loaded) => {
                 setCharacters(loaded);

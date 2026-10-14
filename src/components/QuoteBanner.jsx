@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getQuotes, hasApiKey } from '../services/oneApi';
+import { getQuotes } from '../services/oneApi';
 import { FALLBACK_QUOTES } from '../data/fellowship';
 
 const ROTATE_MS = 15000;
@@ -20,7 +20,6 @@ export default function QuoteBanner() {
     const [paused, setPaused] = useState(false);
 
     useEffect(() => {
-        if (!hasApiKey) return;
         let active = true;
         getQuotes()
             .then((loaded) => {
