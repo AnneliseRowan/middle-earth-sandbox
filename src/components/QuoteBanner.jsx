@@ -19,16 +19,30 @@ export default function QuoteBanner() {
     const [quote, setQuote] = useState(() => pickRandom(FALLBACK_QUOTES));
     const [paused, setPaused] = useState(false);
 
+    // Only the banner (on every page) reports the lore.json fallback. CharacterSpotlight shares the same cached load,
+    // so reporting it there too would double-count. `active` keeps StrictMode's double mount in development from sending it twice.
     useEffect(() => {
         let active = true;
         getQuotes()
             .then((loaded) => {
-                if (!active || !loaded.length) return;
+                if (!active) return;
+                if (!loaded.length) {
+                    window.pendo?.track('quote_banner_fallback_used', { reason: 'no_quotes', fallback_quote_count: FALLBACK_QUOTES.length });
+                    return;
+                }
                 setQuotes(loaded);
                 setSource('api');
                 setQuote(pickRandom(loaded));
             })
-            .catch((error) => console.warn('[middle-earth-sandbox] falling back to archived quotes:', error.message));
+            .catch((error) => {
+                console.warn('[middle-earth-sandbox] falling back to archived quotes:', error.message);
+                if (!active) return;
+                window.pendo?.track('quote_banner_fallback_used', {
+                    reason: 'load_failed',
+                    error_message: error.message,
+                    fallback_quote_count: FALLBACK_QUOTES.length
+                });
+            });
         return () => {
             active = false;
         };

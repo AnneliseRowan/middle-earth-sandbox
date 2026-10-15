@@ -12,17 +12,33 @@ export default function Council() {
 
     const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
+    // A rejected submit looks the same as a successful one in click data, so record which rule blocked it.
+    // Only whether a name was entered is sent, never the free-text name itself.
+    const reject = (errorType, message) => {
+        window.pendo?.track('council_oath_validation_failed', {
+            error_type: errorType,
+            error_message: message,
+            has_name: Boolean(form.name.trim()),
+            race: form.race || 'none',
+            gift: form.gift || 'none',
+            oath: form.oath
+        });
+        setError(message);
+    };
+
     const submit = (e) => {
         e.preventDefault();
         if (!form.name.trim() || !form.race) {
-            setError('The Council requires your name and your people.');
+            reject('missing_name_or_race', 'The Council requires your name and your people.');
             return;
         }
         if (!form.oath) {
-            setError('You must swear the oath to join the quest.');
+            reject('oath_not_sworn', 'You must swear the oath to join the quest.');
             return;
         }
         setError('');
+        // Pendo can't read native <select> values from the click, so send them here (but not the free-text name).
+        window.pendo?.track('council_oath_sworn', { race: form.race, gift: form.gift || 'none', has_gift: Boolean(form.gift) });
         setSworn(form);
     };
 
