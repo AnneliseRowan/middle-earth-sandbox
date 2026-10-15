@@ -20,6 +20,8 @@ export default function Ring() {
     }, [confirming]);
 
     const castIt = () => {
+        // The confirmed "Let it go". Recorded before the state resets so it can say whether the Ring was being worn.
+        window.pendo?.track('ring_destroyed', { ring_was_worn: worn });
         setConfirming(false);
         setWorn(false);
         setDestroyed(true);

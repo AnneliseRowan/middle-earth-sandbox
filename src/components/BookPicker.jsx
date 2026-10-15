@@ -8,13 +8,24 @@ export default function BookPicker() {
     const [chapter, setChapter] = useState(null);
     const [status, setStatus] = useState('loading');
 
+    const bookName = (id) => books.find((book) => book._id === id)?.name;
+
     useEffect(() => {
+        let active = true;
         getBooks()
             .then((loaded) => {
                 setBooks(loaded);
                 setStatus('ready');
             })
-            .catch(() => setStatus('error'));
+            .catch((error) => {
+                setStatus('error');
+                // error.message carries the HTTP status (an outage vs. 429 rate limiting). Only the live mount reports,
+                // so StrictMode's double mount in development doesn't count one failure twice.
+                if (active) window.pendo?.track('red_book_load_failed', { resource: 'books', error_message: error.message });
+            });
+        return () => {
+            active = false;
+        };
     }, []);
 
     useEffect(() => {
@@ -22,11 +33,32 @@ export default function BookPicker() {
         setChapters([]);
         setChapter(null);
         getChapters(bookId)
-            .then(setChapters)
-            .catch(() => setStatus('error'));
+            .then((loaded) => {
+                setChapters(loaded);
+                // Uses this effect's own bookId, so each event matches the response it came from.
+                window.pendo?.track('red_book_volume_selected', {
+                    book_id: bookId,
+                    book_name: bookName(bookId),
+                    chapter_count: loaded.length
+                });
+            })
+            .catch((error) => {
+                setStatus('error');
+                window.pendo?.track('red_book_load_failed', { resource: 'chapters', book_id: bookId, error_message: error.message });
+            });
     }, [bookId]);
 
-    const randomChapter = () => setChapter(chapters[Math.floor(Math.random() * chapters.length)]);
+    const randomChapter = () => {
+        const picked = chapters[Math.floor(Math.random() * chapters.length)];
+        setChapter(picked);
+        window.pendo?.track('red_book_random_chapter_opened', {
+            book_id: bookId,
+            book_name: bookName(bookId),
+            chapter_id: picked._id,
+            chapter_name: picked.chapterName,
+            chapter_count: chapters.length
+        });
+    };
 
     return (
         <article className="card" id="book-picker-card">

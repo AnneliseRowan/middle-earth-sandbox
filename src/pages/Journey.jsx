@@ -8,6 +8,32 @@ export default function Journey() {
     const last = LOCATIONS.length - 1;
     const percent = Math.round((reached / last) * 100);
 
+    const travel = (index) => {
+        setReached(index);
+        // Reaching Mount Doom is the journey's single outcome event; the travel-* clicks only show the steps.
+        if (index === last) {
+            const destination = LOCATIONS[index];
+            window.pendo?.track('journey_completed', {
+                final_location_id: destination.id,
+                final_location_name: destination.name,
+                final_region: destination.region,
+                stops_visited: LOCATIONS.length
+            });
+        }
+    };
+
+    // Recorded before progress goes back to 0: how far the traveller got, and whether it was a replay or giving up partway.
+    const reset = () => {
+        window.pendo?.track('journey_reset', {
+            from_location_id: LOCATIONS[reached].id,
+            from_location_name: LOCATIONS[reached].name,
+            stops_reached: reached,
+            progress_percent: percent,
+            was_completed: reached === last
+        });
+        setReached(0);
+    };
+
     return (
         <section className="page" id="page-journey">
             <div className="page-header">
@@ -18,7 +44,7 @@ export default function Journey() {
                         Currently at <strong id="current-location">{LOCATIONS[reached].name}</strong>
                     </p>
                 </div>
-                <button type="button" className="btn ghost" id="reset-journey-btn" onClick={() => setReached(0)} disabled={!reached}>
+                <button type="button" className="btn ghost" id="reset-journey-btn" onClick={reset} disabled={!reached}>
                     Return to Bag End
                 </button>
             </div>
@@ -42,7 +68,7 @@ export default function Journey() {
                                 <p className="muted">{location.description}</p>
                             </div>
                             {state === 'next' && (
-                                <button type="button" className="btn primary" id={`travel-${location.id}`} onClick={() => setReached(index)}>
+                                <button type="button" className="btn primary" id={`travel-${location.id}`} onClick={() => travel(index)}>
                                     Travel
                                 </button>
                             )}
