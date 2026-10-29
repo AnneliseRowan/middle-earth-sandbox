@@ -48,6 +48,11 @@ export default function Shire() {
                 </article>
                 <BookPicker />
             </div>
+            <div>
+                <p>Hobbits keep seven meals a day.</p>
+                <p>The Party Tree stands in the Party Field.</p>
+                <p>Pipe-weed is harvested in late autumn.</p>
+            </div>
         </section>
     );
 }
