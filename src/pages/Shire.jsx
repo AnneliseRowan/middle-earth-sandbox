@@ -51,7 +51,7 @@ export default function Shire() {
             <div>
                 <p>Hobbits keep seven meals a day.</p>
                 <p>The Party Tree stands in the Party Field.</p>
-                <p>Pipe-weed is harvested in late autumn.</p>
+                <p id="pipeweed-fact">Pipe-weed is harvested in late autumn.</p>
             </div>
         </section>
     );
