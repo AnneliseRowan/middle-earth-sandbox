@@ -58,7 +58,7 @@ export default function QuoteBanner() {
 
     return (
         <aside className="quote-banner" id="quote-banner">
-            <blockquote aria-live="polite">
+            <blockquote aria-live="polite" id="quote-text">
                 “{quote.text}”<cite id="quote-speaker">— {quote.speaker}</cite>
             </blockquote>
             <div className="quote-actions">
@@ -68,7 +68,7 @@ export default function QuoteBanner() {
                 <button type="button" className="btn ghost small" id="quote-pause-btn" onClick={() => setPaused((p) => !p)}>
                     {paused ? 'Resume' : 'Pause'}
                 </button>
-                <button type="button" className="btn ghost small" onClick={nextQuote}>
+                <button type="button" className="btn ghost small" id="quote-next-btn" onClick={nextQuote}>
                     Another quote
                 </button>
             </div>
