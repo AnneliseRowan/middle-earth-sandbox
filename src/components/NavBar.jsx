@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 const LINKS = [
     { id: 'nav-shire', to: '/', label: 'The Shire', end: true },
     { id: 'nav-fellowship', to: '/fellowship', label: 'Fellowship' },
-    { id: 'nav-journey', to: '/journey', label: 'Journey' },
     { id: 'nav-council', to: '/council', label: 'Council' },
     { id: 'nav-ring', to: '/ring', label: 'The Ring' }
 ];
