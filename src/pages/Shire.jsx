@@ -31,11 +31,11 @@ export default function Shire() {
             <div className="grid two">
                 <article className="card" id="second-breakfast-card">
                     <h2>Second Breakfast Tracker</h2>
-                    <p className="big-number">
+                    <p className="big-number" id="meal-count">
                         {meals}
                     </p>
                     <p className="muted">
-                        meals eaten today · next up: <strong>{nextMeal}</strong>
+                        meals eaten today · next up: <strong id="next-meal">{nextMeal}</strong>
                     </p>
                     <div className="row">
                         <button type="button" className="btn primary" id="eat-meal-btn" onClick={() => setMeals((m) => m + 1)}>

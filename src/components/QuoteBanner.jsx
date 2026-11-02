@@ -58,7 +58,7 @@ export default function QuoteBanner() {
 
     return (
         <aside className="quote-banner" id="quote-banner">
-            <blockquote aria-live="polite" id="quote-text">
+            <blockquote aria-live="polite">
                 “{quote.text}”<cite id="quote-speaker">— {quote.speaker}</cite>
             </blockquote>
             <div className="quote-actions">
