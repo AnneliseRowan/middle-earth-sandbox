@@ -44,7 +44,7 @@ export default function Journey() {
                         Currently at <strong id="current-location">{LOCATIONS[reached].name}</strong>
                     </p>
                 </div>
-                <button type="button" className="btn ghost" id="reset-journey-btn" onClick={reset} disabled={!reached}>
+                <button type="button" className="btn ghost" id="journey-reset-btn" onClick={reset} disabled={!reached}>
                     Return to Bag End
                 </button>
             </div>
