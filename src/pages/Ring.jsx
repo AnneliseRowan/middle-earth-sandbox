@@ -79,12 +79,12 @@ export default function Ring() {
                         <h2 id="mount-doom-title">Destroy it?</h2>
                         <p>The fires are right there. All you have to do is let go.</p>
                         <div className="row">
-                            <button type="button" className="btn danger" id="confirm-cast-btn" ref={confirmRef} onClick={castIt}>
+                            <span id="cast-confirm-wrap"><button type="button" className="btn danger" id="cast-confirm-btn" ref={confirmRef} onClick={castIt}>
                                 Let it go
-                            </button>
-                            <button type="button" className="btn ghost" id="keep-ring-btn" onClick={() => setConfirming(false)}>
+                            </button></span>
+                            <span id="ring-keep-wrap"><button type="button" className="btn ghost" id="ring-keep-btn" onClick={() => setConfirming(false)}>
                                 No, it’s mine. My precious.
-                            </button>
+                            </button></span>
                         </div>
                     </div>
                 </div>
