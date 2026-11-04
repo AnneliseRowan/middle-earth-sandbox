@@ -38,7 +38,7 @@ export default function Shire() {
                         meals eaten today · next up: <strong id="next-meal">{nextMeal}</strong>
                     </p>
                     <div className="row">
-                        <button type="button" className="btn primary" id="eat-meal-btn" onClick={() => setMeals((m) => m + 1)}>
+                        <button type="button" className="btn primary" id="eat-meal-button" onClick={() => setMeals((m) => m + 1)}>
                             Eat {nextMeal}
                         </button>
                         <button type="button" className="btn ghost" id="reset-meals-btn" onClick={() => setMeals(0)} disabled={!meals}>

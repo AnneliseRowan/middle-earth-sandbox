@@ -79,7 +79,7 @@ export default function BookPicker() {
                     {chapters.length ? `${chapters.length} chapters` : 'Turning pages…'}
                 </p>
             )}
-            <button type="button" className="btn" id="random-chapter-btn" onClick={randomChapter} disabled={!chapters.length}>
+            <button type="button" className="btn" id="random-chapter-button" onClick={randomChapter} disabled={!chapters.length}>
                 Open to a random chapter
             </button>
             {chapter && (
