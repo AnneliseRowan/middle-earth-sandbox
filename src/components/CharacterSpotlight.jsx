@@ -46,7 +46,7 @@ export default function CharacterSpotlight() {
                 <dd id="spotlight-death">{character.death}</dd>
             </dl>
             <div className="row">
-                <button type="button" className="btn primary" data-testid="summon-companion" onClick={summon} disabled={loading}>
+                <button type="button" className="btn primary" id="summon-character-btn" onClick={summon} disabled={loading}>
                     Summon another
                 </button>
                 {character.wikiUrl && (
