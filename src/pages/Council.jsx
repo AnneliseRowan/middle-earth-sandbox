@@ -104,7 +104,7 @@ export default function Council() {
                     </p>
                 )}
 
-                <button type="submit" className="btn primary" id="council-submit-btn">
+                <button type="submit" className="btn primary" id="council-submit">
                     Swear the oath
                 </button>
             </form>
