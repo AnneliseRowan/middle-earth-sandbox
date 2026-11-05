@@ -68,7 +68,7 @@ export default function QuoteBanner() {
                 <button type="button" className="btn ghost small" id="quote-pause-btn" onClick={() => setPaused((p) => !p)}>
                     {paused ? 'Resume' : 'Pause'}
                 </button>
-                <button type="button" className="btn ghost small" id="quote-next-btn" onClick={nextQuote}>
+                <button type="button" className="btn ghost small" id="quote-next-button" onClick={nextQuote}>
                     Another quote
                 </button>
             </div>
