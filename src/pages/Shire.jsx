@@ -41,6 +41,9 @@ export default function Shire() {
                         <button type="button" className="btn primary" id="eat-meal-button" onClick={() => setMeals((m) => m + 1)}>
                             Eat {nextMeal}
                         </button>
+                        <button type="button" className="btn ghost" id="reset-meals-btn" onClick={() => setMeals(0)} disabled={!meals}>
+                            Fast like an Elf
+                        </button>
                     </div>
                 </article>
                 <BookPicker />
