@@ -9,6 +9,8 @@
     --ember: #a8361f;
     --shadow: 0 2px 10px rgba(43, 33, 24, 0.12);
     --radius: 10px;
+    --surface: #fbf6ea;
+    --field: #fffdf7;
     font-family: 'EB Garamond', Georgia, serif;
     color: var(--ink);
     background: var(--parchment);
@@ -262,7 +264,7 @@ a {
 }
 
 .card {
-    background: #fbf6ea;
+    background: var(--surface);
     border: 1px solid rgba(184, 137, 43, 0.45);
     border-radius: var(--radius);
     padding: 22px;
@@ -305,7 +307,7 @@ input[type='text'] {
     padding: 8px 10px;
     border: 1px solid var(--ink-soft);
     border-radius: 6px;
-    background: #fffdf7;
+    background: var(--field);
     color: var(--ink);
 }
 
@@ -472,7 +474,7 @@ input[type='text'] {
     padding: 14px 18px;
     border-radius: var(--radius);
     border: 1px solid rgba(184, 137, 43, 0.35);
-    background: #fbf6ea;
+    background: var(--surface);
 }
 
 .stop-body {
@@ -607,7 +609,7 @@ body.ring-worn #wear-ring-toggle {
 }
 
 .modal {
-    background: #fbf6ea;
+    background: var(--surface);
     border: 2px solid var(--ember);
     border-radius: var(--radius);
     padding: 28px;
@@ -623,4 +625,57 @@ body.ring-worn #wear-ring-toggle {
         padding-left: 16px;
         padding-right: 16px;
     }
+}
+
+.theme-toggle {
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 234, 213, 0.35);
+    background: transparent;
+    color: var(--parchment);
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    background: rgba(244, 234, 213, 0.12);
+}
+
+/* Dark mode: a .dark class on <html>, set by the nav toggle (or the OS setting on first visit). */
+html.dark {
+    color-scheme: dark;
+    --parchment: #1d1813;
+    --parchment-dark: #2a221a;
+    --ink: #eee3cb;
+    --ink-soft: #bfae94;
+    --gold: #c99a3e;
+    --gold-bright: #e3b65a;
+    --green: #86ad7e;
+    --ember: #e06a4f;
+    --surface: #2a231c;
+    --field: #221c16;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+html.dark body {
+    background:
+        radial-gradient(ellipse at top, rgba(255, 255, 255, 0.04), transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(201, 154, 62, 0.08), transparent 70%),
+        var(--parchment);
+}
+
+html.dark .navbar {
+    background: #120e0a;
+    color: #eee3cb;
+}
+
+html.dark .nav-links a,
+html.dark .theme-toggle {
+    color: #eee3cb;
+}
+
+html.dark .nav-links a.active,
+html.dark .badge.gold {
+    color: #1d1813;
 }
