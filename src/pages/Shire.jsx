@@ -19,7 +19,7 @@ export default function Shire() {
                     is waiting.
                 </p>
                 <div className="hero-actions">
-                    <button type="button" className="btn primary" id="begin-journey-btn" onClick={() => navigate('/journey')}>
+                    <button type="button" className="btn primary" id="begin-journey-btn" data-novus-id="shire-begin-journey" onClick={() => navigate('/journey')}>
                         Begin your journey
                     </button>
                     <button type="button" className="btn" id="meet-fellowship-btn" onClick={() => navigate('/fellowship')}>
